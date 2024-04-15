@@ -1,0 +1,12 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 498479298826-28h1oe9s96uhlo1k5pq0ovp7g2t9l50o.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri : https://52.79.230.93:8080/login/oauth2/code/google
+            scope:
+              - profile
+              - email
