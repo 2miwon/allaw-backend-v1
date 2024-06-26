@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import site.allawbackend.config.auth.dto.SessionUser;
+import site.allawbackend.common.auth.dto.SessionUser;
 
 @RequiredArgsConstructor
 @Controller

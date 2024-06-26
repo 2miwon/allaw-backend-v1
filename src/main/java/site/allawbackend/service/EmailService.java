@@ -31,10 +31,10 @@ public class EmailService {
     @Transactional
     public void sendEmailByKeyword(String keywordValue, String subject, String messageBody){
         Keyword keyword = keywordService.findByValue(keywordValue);
-        List<User> receivers = subscriptionRepository.findAllUsersByKeyword(keyword.getId()).get();
-        for(User receiver: receivers){
-            sendEmail(receiver.getName(),subject,messageBody);
-        }
+//        List<User> receivers = subscriptionRepository.findAllUsersByKeyword(keyword.getId()).get();
+//        for(User receiver: receivers){
+//            sendEmail(receiver.getName(),subject,messageBody);
+//        }
     }
 
     @Transactional
