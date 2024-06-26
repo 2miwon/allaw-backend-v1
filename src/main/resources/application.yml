@@ -3,9 +3,9 @@ spring:
     #    driver-class-name: org.h2.Driver
     #    url: jdbc:h2:mem:~/allaw
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://allaw-prod.cl2uk2oweho1.ap-northeast-2.rds.amazonaws.com:3306/main
+    url: jdbc:mysql://allaw-busan-database.cl2uk2oweho1.ap-northeast-2.rds.amazonaws.com:3306/main
     username: admin
-    password: allaw015
+    password: .ec[|ILfQ|oio6q$fB_p)8H8mhDw
     hikari:
       idleTimeout: 500
       connectionTimeout: 15000
