@@ -34,7 +34,7 @@ public class SubscriptionService {
     public KeywordDto subscribe(String userEmail, String keywordValue) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        Keyword keyword = keywordRepository.findByValue(keywordValue)
+        Keyword keyword = keywordRepository.findByContent(keywordValue)
                 .orElseGet(() -> {
                     Keyword newKeyword = new Keyword(keywordValue);
                     return keywordRepository.save(newKeyword);
@@ -68,11 +68,11 @@ public class SubscriptionService {
         Long userId = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"))
                 .getId();
-        List<Keyword> keywords = subscriptionRepository.findAllKeywordsByUserId(userId)
+        List<Keyword> keywords = subscriptionRepository.findAllKeywordsByUser_Id(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
 
         return keywords.stream()
-                .map(keyword -> new KeywordDto(keyword.getId(), keyword.getValue()))
+                .map(keyword -> new KeywordDto(keyword.getId(), keyword.getContent()))
                 .collect(Collectors.toList());
     }
 }

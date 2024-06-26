@@ -11,6 +11,6 @@ public class KeywordService {
     private final KeywordRepository keywordRepository;
 
     public Keyword findByValue(final String value) {
-        return keywordRepository.findByValue(value).get();
+        return keywordRepository.findByContent(value).get();
     }
 }

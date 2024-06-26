@@ -7,6 +7,5 @@ import java.util.Optional;
 
 public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
-
-    Optional<Keyword> findByValue(String value);
+    Optional<Keyword> findByContent(String content);
 }
