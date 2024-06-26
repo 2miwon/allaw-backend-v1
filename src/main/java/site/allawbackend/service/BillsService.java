@@ -2,14 +2,14 @@ package site.allawbackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import site.allawbackend.repository.BillsRepository;
+import site.allawbackend.repository.BillRepository;
 
 @Service
 @RequiredArgsConstructor
 public class BillsService {
-    private final BillsRepository billsRepository;
+    private final BillRepository billRepository;
     public long countAll() {
-        return billsRepository.countAll();
+        return billRepository.count();
     }
 
 }
