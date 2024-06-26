@@ -1,0 +1,19 @@
+### Test Summary Endpoint
+POST http://localhost:8080/api/gpt/3/summary
+Content-Type: application/json
+
+### Query Endpoint Test
+POST http://localhost:8080/api/gpt/query
+Content-Type: application/json
+
+{
+  "prompt": "Explain the main points of the latest legal proposal regarding environmental regulations."
+}
+
+### Chat with Bill Context Test
+POST http://localhost:8080/api/gpt/4/chat
+Content-Type: application/json
+
+{
+  "prompt": "Can you provide an overview of this bill and its potential impact?"
+}
