@@ -1,4 +1,4 @@
-package site.allawbackend.dto;
+package site.allawbackend.chat.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +10,11 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SummaryRequestDto {
+public class ChatRequestDto {
     private String model;
     private List<MessageDto> messages;
 
-    public SummaryRequestDto(String model, String prompt, String systemPrompt) {
+    public ChatRequestDto(String model, String prompt, String systemPrompt) {
         this.model = model;
 
         this.messages = new ArrayList<>();
