@@ -1,4 +1,4 @@
-package site.allawbackend.config.auth;
+package site.allawbackend.common.auth;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import site.allawbackend.config.auth.dto.OAuthAttributes;
-import site.allawbackend.config.auth.dto.SessionUser;
+import site.allawbackend.common.auth.dto.OAuthAttributes;
+import site.allawbackend.common.auth.dto.SessionUser;
 import site.allawbackend.entity.User;
 import site.allawbackend.repository.UserRepository;
 

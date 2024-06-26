@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import site.allawbackend.config.auth.dto.SessionUser;
+import site.allawbackend.common.auth.dto.SessionUser;
 import site.allawbackend.service.UserService;
 
 @RestController

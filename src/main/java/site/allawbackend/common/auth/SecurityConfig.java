@@ -1,4 +1,4 @@
-package site.allawbackend.config.auth;
+package site.allawbackend.common.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package site.allawbackend.config.auth.dto;
+package site.allawbackend.common.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
