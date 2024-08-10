@@ -1,9 +1,12 @@
+server:
+  port: 8080
+
 spring:
   datasource:
-    #    driver-class-name: org.h2.Driver
-    #    url: jdbc:h2:mem:~/allaw
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://allaw-busan-database.cl2uk2oweho1.ap-northeast-2.rds.amazonaws.com:3306/main
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:~/allaw
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://allaw-busan-database.cl2uk2oweho1.ap-northeast-2.rds.amazonaws.com:3306/main
     username: admin
     password: .ec[|ILfQ|oio6q$fB_p)8H8mhDw
     hikari:
@@ -37,6 +40,10 @@ spring:
           debug: true
           ssl:
             enable:
+gemini:
+  api:
+    url: https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent
+    key: ${GEMINI_KEY}
 openai:
   api-key: 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
   model: gpt-3.5-turbo
