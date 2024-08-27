@@ -13,6 +13,7 @@ import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -21,13 +22,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/legal")
@@ -38,22 +40,23 @@ public class LegalRecommendController {
 
     @PostMapping("/recommend")
     public List<String> searchRelevantLaws(@RequestBody String caseText) throws IOException {
-        // KoBERT 임베딩 생성 - Python 서비스와 연동
+
         float[] queryVector = generateKoBERTEmbedding(caseText);
 
         // 스크립트 파라미터 설정
         Map<String, Object> params = new HashMap<>();
         params.put("queryVector", queryVector);
 
-        // 스크립트 기반 점수 계산
+       // 스크립트 기반 점수 계산
         ScriptScoreFunctionBuilder scriptScoreFunctionBuilder = new ScriptScoreFunctionBuilder(
                 new Script(
                         ScriptType.INLINE,  // 스크립트 타입 설정 (INLINE 사용)
                         "painless",  // 스크립트 언어 설정
-                        "cosineSimilarity(params.queryVector, 'content_vector') + 1.0",  // 스크립트 본문
+                        "cosineSimilarity(params.queryVector, 'content_vector')",  // 스크립트 본문
                         params  // 파라미터 전달
                 )
         );
+
 
         // Elasticsearch 벡터 검색 쿼리 작성
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
@@ -76,11 +79,14 @@ public class LegalRecommendController {
             String title = (String) hit.getSourceAsMap().get("title");
             String content = (String) hit.getSourceAsMap().get("content");
 
-            // 관련도 계산 (0-100%로 표시)
+            // 관련도 계산 (0-100%로 표시, 소숫점 2자리까지)
             float maxScore = searchResponse.getHits().getMaxScore();
-            int relevancePercentage = Math.round((score / maxScore) * 100);
+            float relevancePercentage = (score / maxScore) * 100;
 
-            results.add("관련도: " + relevancePercentage + "% - " + title + " - " + content);
+            // 소숫점 2자리까지 포맷팅하여 문자열로 변환
+            String formattedRelevance = String.format("%.2f", relevancePercentage);
+
+            results.add("관련도: " + formattedRelevance + "% - " + title + " - " + content);
         }
 
         return results;
@@ -88,7 +94,10 @@ public class LegalRecommendController {
 
     // KoBERT 임베딩 생성 - Python flask와 연동
     private float[] generateKoBERTEmbedding(String text) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplateBuilder()
+                .setConnectTimeout(Duration.ofSeconds(5))
+                .setReadTimeout(Duration.ofSeconds(10))
+                .build();
         String url = "http://localhost:5000/embed";
 
         HttpHeaders headers = new HttpHeaders();
@@ -97,14 +106,20 @@ public class LegalRecommendController {
         Map<String, String> requestBody = Map.of("text", text);
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<Map<String, Object>>() {});
 
-        // 임베딩 벡터 추출
-        List<Double> embeddingList = (List<Double>) response.getBody().get("embedding");
-        float[] embedding = new float[embeddingList.size()];
-        for (int i = 0; i < embeddingList.size(); i++) {
-            embedding[i] = embeddingList.get(i).floatValue();
+            // 임베딩 벡터 추출
+            List<Double> embeddingList = (List<Double>) response.getBody().get("embedding");
+            float[] embedding = new float[embeddingList.size()];
+            for (int i = 0; i < embeddingList.size(); i++) {
+                embedding[i] = embeddingList.get(i).floatValue();
+            }
+            return embedding;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to generate embedding from KoBERT service", e);
         }
-        return embedding;
     }
 }
